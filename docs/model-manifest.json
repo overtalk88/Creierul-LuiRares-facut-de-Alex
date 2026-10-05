@@ -1,0 +1,366 @@
+{
+  "repository": "ssrpw2/brain-atlas",
+  "commit": "c20c30e9c4628b9d129ecf061ff8cce99f358490",
+  "sourceBounds": {
+    "min": [-71.14990234375, -169.677001953125, 1464.5],
+    "max": [69.69869995117188, 10.329299926757812, 1630.4599609375]
+  },
+  "meshes": [
+    {
+      "mesh": "amygdala_FJ1753",
+      "region": "amygdala",
+      "vertices": 193,
+      "triangles": 382
+    },
+    {
+      "mesh": "amygdala_FJ1829",
+      "region": "amygdala",
+      "vertices": 194,
+      "triangles": 384
+    },
+    {
+      "mesh": "angular_gyrus_FJ1732",
+      "region": "parietal",
+      "vertices": 1796,
+      "triangles": 3588
+    },
+    {
+      "mesh": "angular_gyrus_FJ1733",
+      "region": "parietal",
+      "vertices": 1779,
+      "triangles": 3554
+    },
+    {
+      "mesh": "caudate_nucleus_FJ1754",
+      "region": "basal",
+      "vertices": 1274,
+      "triangles": 2544
+    },
+    {
+      "mesh": "caudate_nucleus_FJ1802",
+      "region": "basal",
+      "vertices": 1287,
+      "triangles": 2570
+    },
+    {
+      "mesh": "cerebellum_FJ1781",
+      "region": "cerebellum",
+      "vertices": 11911,
+      "triangles": 23818
+    },
+    {
+      "mesh": "cerebellum_FJ1830",
+      "region": "cerebellum",
+      "vertices": 11943,
+      "triangles": 23882
+    },
+    {
+      "mesh": "cingulate_gyrus_FJ1739",
+      "region": "context",
+      "vertices": 1210,
+      "triangles": 2416
+    },
+    {
+      "mesh": "cingulate_gyrus_FJ1740",
+      "region": "context",
+      "vertices": 1175,
+      "triangles": 2346
+    },
+    {
+      "mesh": "corpus_callosum_FJ1742",
+      "region": "callosum",
+      "vertices": 15118,
+      "triangles": 30232
+    },
+    {
+      "mesh": "fusiform_gyrus_FJ1783",
+      "region": "temporal",
+      "vertices": 777,
+      "triangles": 1550
+    },
+    {
+      "mesh": "fusiform_gyrus_FJ1784",
+      "region": "temporal",
+      "vertices": 815,
+      "triangles": 1626
+    },
+    {
+      "mesh": "globus_pallidus_FJ1757",
+      "region": "basal",
+      "vertices": 3542,
+      "triangles": 7080
+    },
+    {
+      "mesh": "globus_pallidus_FJ1805",
+      "region": "basal",
+      "vertices": 2674,
+      "triangles": 5344
+    },
+    {
+      "mesh": "hippocampus_FJ1759",
+      "region": "hippocampus",
+      "vertices": 492,
+      "triangles": 980
+    },
+    {
+      "mesh": "hippocampus_FJ1807",
+      "region": "hippocampus",
+      "vertices": 512,
+      "triangles": 1020
+    },
+    {
+      "mesh": "hypothalamus_FJ1760",
+      "region": "hypothalamus",
+      "vertices": 1029,
+      "triangles": 2050
+    },
+    {
+      "mesh": "hypothalamus_FJ1808",
+      "region": "hypothalamus",
+      "vertices": 1018,
+      "triangles": 2028
+    },
+    {
+      "mesh": "inferior_frontal_gyrus_FJ1744",
+      "region": "frontal",
+      "vertices": 1649,
+      "triangles": 3290
+    },
+    {
+      "mesh": "inferior_frontal_gyrus_FJ1745",
+      "region": "frontal",
+      "vertices": 1650,
+      "triangles": 3292
+    },
+    {
+      "mesh": "inferior_temporal_gyrus_FJ1746",
+      "region": "temporal",
+      "vertices": 1368,
+      "triangles": 2732
+    },
+    {
+      "mesh": "inferior_temporal_gyrus_FJ1747",
+      "region": "temporal",
+      "vertices": 1386,
+      "triangles": 2768
+    },
+    {
+      "mesh": "insula_FJ1748",
+      "region": "context",
+      "vertices": 1226,
+      "triangles": 2448
+    },
+    {
+      "mesh": "insula_FJ1749",
+      "region": "context",
+      "vertices": 1226,
+      "triangles": 2448
+    },
+    {
+      "mesh": "medulla_oblongata_FJ1769",
+      "region": "brainstem",
+      "vertices": 3020,
+      "triangles": 6036
+    },
+    {
+      "mesh": "medulla_oblongata_FJ1831",
+      "region": "brainstem",
+      "vertices": 3032,
+      "triangles": 6060
+    },
+    {
+      "mesh": "midbrain_FJ1770",
+      "region": "brainstem",
+      "vertices": 3236,
+      "triangles": 6468
+    },
+    {
+      "mesh": "midbrain_FJ1817",
+      "region": "brainstem",
+      "vertices": 3222,
+      "triangles": 6440
+    },
+    {
+      "mesh": "middle_frontal_gyrus_FJ1787",
+      "region": "frontal",
+      "vertices": 1710,
+      "triangles": 3416
+    },
+    {
+      "mesh": "middle_frontal_gyrus_FJ1788",
+      "region": "frontal",
+      "vertices": 1665,
+      "triangles": 3326
+    },
+    {
+      "mesh": "middle_temporal_gyrus_FJ1789",
+      "region": "temporal",
+      "vertices": 1357,
+      "triangles": 2710
+    },
+    {
+      "mesh": "middle_temporal_gyrus_FJ1790",
+      "region": "temporal",
+      "vertices": 1379,
+      "triangles": 2754
+    },
+    {
+      "mesh": "occipital_lobe_FJ1791",
+      "region": "occipital",
+      "vertices": 2197,
+      "triangles": 4390
+    },
+    {
+      "mesh": "occipital_lobe_FJ1792",
+      "region": "occipital",
+      "vertices": 2284,
+      "triangles": 4564
+    },
+    {
+      "mesh": "orbital_gyrus_FJ1793",
+      "region": "frontal",
+      "vertices": 1379,
+      "triangles": 2750
+    },
+    {
+      "mesh": "orbital_gyrus_FJ1794",
+      "region": "frontal",
+      "vertices": 1288,
+      "triangles": 2568
+    },
+    {
+      "mesh": "parahippocampal_gyrus_FJ1785",
+      "region": "temporal",
+      "vertices": 372,
+      "triangles": 740
+    },
+    {
+      "mesh": "parahippocampal_gyrus_FJ1786",
+      "region": "temporal",
+      "vertices": 443,
+      "triangles": 882
+    },
+    {
+      "mesh": "pons_FJ1775",
+      "region": "brainstem",
+      "vertices": 5154,
+      "triangles": 10304
+    },
+    {
+      "mesh": "pons_FJ1822",
+      "region": "brainstem",
+      "vertices": 5177,
+      "triangles": 10346
+    },
+    {
+      "mesh": "postcentral_gyrus_FJ1797",
+      "region": "somatosensory",
+      "vertices": 1804,
+      "triangles": 3604
+    },
+    {
+      "mesh": "postcentral_gyrus_FJ1798",
+      "region": "somatosensory",
+      "vertices": 1804,
+      "triangles": 3604
+    },
+    {
+      "mesh": "precentral_gyrus_FJ1800",
+      "region": "motor",
+      "vertices": 2023,
+      "triangles": 4042
+    },
+    {
+      "mesh": "precentral_gyrus_FJ1801",
+      "region": "motor",
+      "vertices": 2023,
+      "triangles": 4042
+    },
+    {
+      "mesh": "putamen_FJ1776",
+      "region": "basal",
+      "vertices": 3530,
+      "triangles": 7056
+    },
+    {
+      "mesh": "putamen_FJ1823",
+      "region": "basal",
+      "vertices": 3534,
+      "triangles": 7064
+    },
+    {
+      "mesh": "superior_frontal_gyrus_FJ1833",
+      "region": "frontal",
+      "vertices": 3230,
+      "triangles": 6452
+    },
+    {
+      "mesh": "superior_frontal_gyrus_FJ1834",
+      "region": "frontal",
+      "vertices": 3229,
+      "triangles": 6450
+    },
+    {
+      "mesh": "superior_parietal_lobule_FJ1835",
+      "region": "parietal",
+      "vertices": 2684,
+      "triangles": 5364
+    },
+    {
+      "mesh": "superior_parietal_lobule_FJ1836",
+      "region": "parietal",
+      "vertices": 2822,
+      "triangles": 5640
+    },
+    {
+      "mesh": "superior_temporal_gyrus_FJ1837",
+      "region": "auditory",
+      "vertices": 904,
+      "triangles": 1804
+    },
+    {
+      "mesh": "superior_temporal_gyrus_FJ1838",
+      "region": "auditory",
+      "vertices": 948,
+      "triangles": 1892
+    },
+    {
+      "mesh": "superior_temporal_gyrus_FJ1839",
+      "region": "auditory",
+      "vertices": 1134,
+      "triangles": 2264
+    },
+    {
+      "mesh": "superior_temporal_gyrus_FJ1840",
+      "region": "auditory",
+      "vertices": 1134,
+      "triangles": 2264
+    },
+    {
+      "mesh": "supramarginal_gyrus_FJ1841",
+      "region": "parietal",
+      "vertices": 1174,
+      "triangles": 2344
+    },
+    {
+      "mesh": "supramarginal_gyrus_FJ1842",
+      "region": "parietal",
+      "vertices": 1159,
+      "triangles": 2314
+    },
+    {
+      "mesh": "thalamus_FJ1782",
+      "region": "thalamus",
+      "vertices": 853,
+      "triangles": 1702
+    },
+    {
+      "mesh": "thalamus_FJ1827",
+      "region": "thalamus",
+      "vertices": 381,
+      "triangles": 758
+    }
+  ],
+  "triangles": 276786,
+  "bytes": 6688428
+}

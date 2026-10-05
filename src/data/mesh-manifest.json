@@ -1,0 +1,62 @@
+{
+  "amygdala": ["amygdala_FJ1753", "amygdala_FJ1829"],
+  "parietal": [
+    "angular_gyrus_FJ1732",
+    "angular_gyrus_FJ1733",
+    "superior_parietal_lobule_FJ1835",
+    "superior_parietal_lobule_FJ1836",
+    "supramarginal_gyrus_FJ1841",
+    "supramarginal_gyrus_FJ1842"
+  ],
+  "basal": [
+    "caudate_nucleus_FJ1754",
+    "caudate_nucleus_FJ1802",
+    "globus_pallidus_FJ1757",
+    "globus_pallidus_FJ1805",
+    "putamen_FJ1776",
+    "putamen_FJ1823"
+  ],
+  "cerebellum": ["cerebellum_FJ1781", "cerebellum_FJ1830"],
+  "context": ["cingulate_gyrus_FJ1739", "cingulate_gyrus_FJ1740", "insula_FJ1748", "insula_FJ1749"],
+  "callosum": ["corpus_callosum_FJ1742"],
+  "temporal": [
+    "fusiform_gyrus_FJ1783",
+    "fusiform_gyrus_FJ1784",
+    "inferior_temporal_gyrus_FJ1746",
+    "inferior_temporal_gyrus_FJ1747",
+    "middle_temporal_gyrus_FJ1789",
+    "middle_temporal_gyrus_FJ1790",
+    "parahippocampal_gyrus_FJ1785",
+    "parahippocampal_gyrus_FJ1786"
+  ],
+  "hippocampus": ["hippocampus_FJ1759", "hippocampus_FJ1807"],
+  "hypothalamus": ["hypothalamus_FJ1760", "hypothalamus_FJ1808"],
+  "frontal": [
+    "inferior_frontal_gyrus_FJ1744",
+    "inferior_frontal_gyrus_FJ1745",
+    "middle_frontal_gyrus_FJ1787",
+    "middle_frontal_gyrus_FJ1788",
+    "orbital_gyrus_FJ1793",
+    "orbital_gyrus_FJ1794",
+    "superior_frontal_gyrus_FJ1833",
+    "superior_frontal_gyrus_FJ1834"
+  ],
+  "brainstem": [
+    "medulla_oblongata_FJ1769",
+    "medulla_oblongata_FJ1831",
+    "midbrain_FJ1770",
+    "midbrain_FJ1817",
+    "pons_FJ1775",
+    "pons_FJ1822"
+  ],
+  "occipital": ["occipital_lobe_FJ1791", "occipital_lobe_FJ1792"],
+  "somatosensory": ["postcentral_gyrus_FJ1797", "postcentral_gyrus_FJ1798"],
+  "motor": ["precentral_gyrus_FJ1800", "precentral_gyrus_FJ1801"],
+  "auditory": [
+    "superior_temporal_gyrus_FJ1837",
+    "superior_temporal_gyrus_FJ1838",
+    "superior_temporal_gyrus_FJ1839",
+    "superior_temporal_gyrus_FJ1840"
+  ],
+  "thalamus": ["thalamus_FJ1782", "thalamus_FJ1827"]
+}

@@ -1,0 +1,8 @@
+node_modules
+dist
+.cache
+test-results
+docs/source-notices
+public/licenses
+*.glb
+package-lock.json
