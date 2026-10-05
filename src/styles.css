@@ -1359,6 +1359,33 @@ h2 {
   pointer-events: none;
 }
 
+.entry-notice {
+  max-width: 490px;
+}
+.entry-notice h2 {
+  padding-right: 0;
+  font-size: 25px;
+}
+.entry-notice #entry-notice-message {
+  margin: 20px 0 26px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.entry-notice-cta {
+  width: 100%;
+  min-height: 48px;
+  padding: 13px 18px;
+  border-radius: 8px;
+  background: var(--green);
+  color: #fffef9;
+  font-weight: 600;
+}
+.entry-notice-cta:hover {
+  background: #284534;
+}
+
 @media (max-width: 760px) {
   .viewer {
     position: sticky;

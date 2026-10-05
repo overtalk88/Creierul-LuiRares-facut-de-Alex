@@ -26,6 +26,7 @@ import { brainRegions, regionById } from './data/brainRegions'
 import { pathways, educationalNote } from './data/pathways'
 import { usePathwayAnimation } from './hooks/usePathwayAnimation'
 import AboutDialog from './components/AboutDialog'
+import EntryNotice from './components/EntryNotice'
 import type { RegionId } from './types/brain'
 const BrainCanvas = lazy(() => import('./components/BrainCanvas'))
 
@@ -35,6 +36,7 @@ export default function App() {
   const [pathId, setPathId] = useState<string>()
   const [deep, setDeep] = useState(false)
   const [about, setAbout] = useState(false)
+  const [showEntryNotice, setShowEntryNotice] = useState(true)
   const [reset, setReset] = useState(0)
   const [zoom, setZoom] = useState(0)
   const [query, setQuery] = useState('')
@@ -130,7 +132,9 @@ export default function App() {
               <span className="status-dot" /> ATLAS INTERACTIV 3D
             </span>
             <h1>
-              {mode === 'anatomy' ? 'Descoperă ce te face tu.' : 'Urmărește o idee în mișcare.'}
+              {mode === 'anatomy'
+                ? 'Descoperă ce te face să fii tu.'
+                : 'Urmărește o idee în mișcare.'}
             </h1>
             <p>
               {mode === 'anatomy'
@@ -550,6 +554,7 @@ export default function App() {
         </button>
       </footer>
       {about && <AboutDialog onClose={() => setAbout(false)} />}
+      {showEntryNotice && <EntryNotice onClose={() => setShowEntryNotice(false)} />}
     </div>
   )
 }

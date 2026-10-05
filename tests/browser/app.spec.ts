@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto'
 const hash = (b: Buffer) => createHash('sha256').update(b).digest('hex')
 async function ready(page: Page) {
   await page.goto('/')
+  await page.getByRole('button', { name: 'rares oancea n-ai de ales', exact: true }).click()
   await expect(page.locator('canvas')).toBeVisible()
   await expect(page.getByText('Se încarcă modelul 3D…')).toBeHidden({ timeout: 20000 })
   await page.evaluate(() => document.fonts.ready)
@@ -194,6 +195,7 @@ for (const [width, height] of [
 test('model request failure is recoverable and content remains available', async ({ page }) => {
   await page.route('**/models/brain.glb', (route) => route.abort())
   await page.goto('/')
+  await page.getByRole('button', { name: 'rares oancea n-ai de ales', exact: true }).click()
   await expect(page.getByText('Modelul 3D nu a putut fi încărcat.')).toBeVisible()
   await page.getByRole('button', { name: /Lob frontal Cortex cerebral/ }).click()
   await expect(page.getByRole('heading', { name: 'Lob frontal', exact: true })).toBeVisible()
@@ -213,6 +215,7 @@ test('no WebGL fallback and reduced-motion playback', async ({ page }) => {
   })
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
+  await page.getByRole('button', { name: 'rares oancea n-ai de ales', exact: true }).click()
   await expect(page.getByText('Vizualizarea 3D necesită WebGL 2.')).toBeVisible()
   await page.getByRole('button', { name: 'Trasee', exact: true }).click()
   await page.getByRole('button', { name: /01 Vedere/ }).click()
@@ -233,6 +236,7 @@ test('loading indicator, context recovery, keyboard dialog and zoomed layout', a
     await route.continue()
   })
   await page.goto('/')
+  await page.getByRole('button', { name: 'rares oancea n-ai de ales', exact: true }).click()
   await expect(page.getByText('Se încarcă modelul 3D…')).toBeVisible()
   release()
   await expect(page.getByText('Se încarcă modelul 3D…')).toBeHidden({ timeout: 20000 })
