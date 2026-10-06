@@ -35,6 +35,6 @@ Textele românești sunt sinteze originale, destinate unui proiect școlar, nu t
 
 ## Software și fonturi
 
-React / React DOM, Three.js, React Three Fiber, Drei, three-stdlib și glTF Transform: MIT. Lucide: ISC. Vite, TypeScript și instrumentele de dezvoltare își păstrează licențele din pachetele npm. Fonturile DM Sans și Manrope sunt găzduite local prin Fontsource, sub SIL Open Font License 1.1. Textele licențelor fonturilor sunt în `public/licenses/`.
+React / React DOM, Three.js, React Three Fiber, Drei, three-stdlib și glTF Transform: MIT. Lucide: ISC. Vite, TypeScript și instrumentele de dezvoltare își păstrează licențele din pachetele npm. Fontul DM Sans este găzduit local prin Fontsource, sub SIL Open Font License 1.1. Textul licenței este în `public/licenses/`.
 
 Licența modelului anatomic nu se aplică automat codului sursă sau textelor originale ale aplicației.
