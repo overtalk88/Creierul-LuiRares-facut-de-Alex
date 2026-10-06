@@ -1,11 +1,23 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, ChevronDown, Eye, Info, Search, X } from 'lucide-react'
-import { brainRegions } from '../data/brainRegions'
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  ChevronDown,
+  Eye,
+  Info,
+  Search,
+  Stethoscope,
+  X,
+} from 'lucide-react'
+import { brainRegions, regionById } from '../data/brainRegions'
+import { deepMeshes } from '../data/modelMap'
 import { educationalNote, pathways } from '../data/pathways'
-import type { BrainRegion, NeuralPathway, RegionId } from '../types/brain'
+import { syndromeNotice, syndromes } from '../data/syndromes'
+import type { BrainRegion, BrainSyndrome, NeuralPathway, RegionId } from '../types/brain'
 import type { usePathwayAnimation } from '../hooks/usePathwayAnimation'
 
-export type Mode = 'anatomy' | 'pathways'
+export type Mode = 'anatomy' | 'pathways' | 'syndromes'
 export type Player = ReturnType<typeof usePathwayAnimation>
 const order = (i: number) => ({ '--i': Math.min(i, 12) }) as CSSProperties
 
@@ -21,6 +33,13 @@ export function ModeTabs({ mode, onChange }: { mode: Mode; onChange: (mode: Mode
         onClick={() => onChange('pathways')}
       >
         Trasee <sup aria-hidden="true">{pathways.length}</sup>
+      </button>
+      <button
+        className="tab"
+        aria-pressed={mode === 'syndromes'}
+        onClick={() => onChange('syndromes')}
+      >
+        Sindroame <sup aria-hidden="true">{syndromes.length}</sup>
       </button>
     </nav>
   )
@@ -98,6 +117,30 @@ export function PathwayList({ onSelect }: { onSelect: (id: string) => void }) {
         </li>
       ))}
     </ul>
+  )
+}
+
+export function SyndromeList({ onSelect }: { onSelect: (id: string) => void }) {
+  return (
+    <>
+      <p className="list-intro">
+        Ce se întâmplă când o regiune a creierului este afectată și ce ne învață asta despre minte.
+      </p>
+      <ul className="index stagger">
+        {syndromes.map((s, i) => (
+          <li key={s.id} style={order(i)}>
+            <button className="pathway-row" onClick={() => onSelect(s.id)}>
+              <span className="num">{String(i + 1).padStart(2, '0')}</span>
+              <span className="row-text">
+                {s.name}
+                <small>{s.site}</small>
+              </span>
+              <ArrowRight className="row-arrow" size={16} strokeWidth={1.6} />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }
 
@@ -246,6 +289,120 @@ export function PathwayInfo({
         <Info size={15} strokeWidth={1.7} />
         <span>{educationalNote}</span>
       </p>
+    </div>
+  )
+}
+
+export function SyndromeHeading({
+  syndrome,
+  onBack,
+}: {
+  syndrome: BrainSyndrome
+  onBack: () => void
+}) {
+  const inside = [...syndrome.focus, ...(syndrome.context ?? [])].some((m) => deepMeshes.has(m))
+  return (
+    <div className="path-title">
+      <BackButton label="Toate sindroamele" onClick={onBack} />
+      <p className="label muted">{syndrome.domain}</p>
+      <h2 className="detail-title">{syndrome.name}</h2>
+      {syndrome.aka && <p className="subtitle">{syndrome.aka}</p>}
+      {inside && (
+        <p className="tag">
+          <Eye size={13} strokeWidth={1.7} />
+          Exterior estompat automat
+        </p>
+      )}
+    </div>
+  )
+}
+
+export function SyndromeInfo({
+  syndrome,
+  onRegion,
+  onPathway,
+}: {
+  syndrome: BrainSyndrome
+  onRegion: (id: RegionId) => void
+  onPathway: (id: string) => void
+}) {
+  const pathway = pathways.find((p) => p.id === syndrome.pathway)
+  return (
+    <div className="detail stagger">
+      <dl className="facts" style={order(0)}>
+        {syndrome.facts.map((f) => (
+          <div key={f.value}>
+            <dt>{f.value}</dt>
+            <dd>{f.label}</dd>
+          </div>
+        ))}
+      </dl>
+      <Section num="001" title="Ce este">
+        <p>{syndrome.summary}</p>
+        <p className="causes">
+          <strong>Cauze frecvente:</strong> {syndrome.causes}
+        </p>
+      </Section>
+      <Section num="002" title="Anatomie">
+        <p>{syndrome.anatomy}</p>
+        <p className="chips-label">Structuri pe model</p>
+        <ul className="chips">
+          {syndrome.regions.map((id) => (
+            <li key={id}>
+              <button className="chip" onClick={() => onRegion(id)}>
+                <span className="dot" style={{ background: regionById[id].color }} />
+                {regionById[id].name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </Section>
+      <Section num="003" title="Cum se manifestă">
+        <ul className="dash-list">
+          {syndrome.signs.map((sign) => (
+            <li key={sign}>{sign}</li>
+          ))}
+        </ul>
+      </Section>
+      <Section num="004" title="Legătura cu psihologia">
+        <p>{syndrome.psychology}</p>
+        <p className="main-idea">{syndrome.insight}</p>
+      </Section>
+      <figure className="history" style={order(5)}>
+        <span className="history-year">{syndrome.history.year}</span>
+        <figcaption>Reper istoric</figcaption>
+        <p>{syndrome.history.text}</p>
+      </figure>
+      <p className="note" style={order(6)}>
+        <Info size={15} strokeWidth={1.7} />
+        <span>{syndrome.note}</span>
+      </p>
+      <p className="note" style={order(6)}>
+        <Stethoscope size={15} strokeWidth={1.7} />
+        <span>{syndromeNotice}</span>
+      </p>
+      {pathway && (
+        <button className="cta" style={order(7)} onClick={() => onPathway(pathway.id)}>
+          Vezi traseul: {pathway.name}
+          <ArrowRight size={17} strokeWidth={1.7} />
+        </button>
+      )}
+      <details className="step-details sources" style={order(8)}>
+        <summary>
+          Surse · {syndrome.sources.length}
+          <ChevronDown size={16} strokeWidth={1.7} />
+        </summary>
+        <ol>
+          {syndrome.sources.map((source) => (
+            <li key={source.url}>
+              <a href={source.url} target="_blank" rel="noreferrer">
+                {source.title}
+                <ArrowUpRight size={13} />
+              </a>
+            </li>
+          ))}
+        </ol>
+      </details>
     </div>
   )
 }

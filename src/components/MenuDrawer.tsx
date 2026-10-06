@@ -2,9 +2,10 @@ import type { CSSProperties } from 'react'
 import { RotateCcw, X } from 'lucide-react'
 import { brainRegions } from '../data/brainRegions'
 import { pathways } from '../data/pathways'
+import { syndromes } from '../data/syndromes'
 import Drawer from './Drawer'
+import type { Mode } from './ExplorePanel'
 
-type Mode = 'anatomy' | 'pathways'
 type Props = {
   open: boolean
   mode: Mode
@@ -35,6 +36,12 @@ export default function MenuDrawer({
       detail: `${pathways.length} circuite`,
       current: mode === 'pathways',
       action: () => onMode('pathways'),
+    },
+    {
+      name: 'Sindroame',
+      detail: `${syndromes.length} sindroame`,
+      current: mode === 'syndromes',
+      action: () => onMode('syndromes'),
     },
     { name: 'Cum citești modelul', detail: 'Culori, gesturi, aproximări', action: onGuide },
     { name: 'Despre proiect și surse', detail: 'Licențe și bibliografie', action: onAbout },

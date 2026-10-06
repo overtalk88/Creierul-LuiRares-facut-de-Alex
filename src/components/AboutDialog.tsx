@@ -59,7 +59,8 @@ export default function AboutDialog({ open, section, onClose, returnFocus }: Pro
         <h2 id="about-title">Despre proiect</h2>
         <p>
           Creierul Interactiv este o aplicație educațională creată pentru prezentarea relației
-          dintre anatomia creierului, procesele neuronale și psihologie.
+          dintre anatomia creierului, procesele neuronale și psihologie. Secțiunea Sindroame arată
+          ce se schimbă în comportament și cogniție când o anumită regiune este afectată.
         </p>
         <section ref={guide} className="info-section">
           <h3>Cum citești modelul</h3>
@@ -74,7 +75,9 @@ export default function AboutDialog({ open, section, onClose, returnFocus }: Pro
           <p>
             Trage pentru a roti modelul și apropie cu două degete, cu rotița sau cu butoanele + și −
             pentru zoom. Atinge o regiune ca să-i deschizi fișa. Regiunea selectată devine albastru
-            intens; etapele deja parcurse ale unui traseu rămân albastru deschis.
+            intens; etapele deja parcurse ale unui traseu rămân albastru deschis. La sindroame,
+            albastrul intens marchează zona afectată tipic, iar cel deschis structurile asociate;
+            modelul se rotește singur spre emisfera implicată.
           </p>
           <p>
             17 concepte educaționale sunt mapate pe 59 de mesh-uri. V1, cortexul prefrontal, nucleii
@@ -96,6 +99,10 @@ export default function AboutDialog({ open, section, onClose, returnFocus }: Pro
             </a>
             . Adaptări: selecție, centrare, schimbarea axelor, conversie OBJ → GLB, normale și
             culori educaționale. Culorile nu sunt culori biologice reale.
+          </p>
+          <p>
+            Fiecare fișă de sindrom are propriile surse, în principal studii indexate în PubMed.
+            Cifrele provin din studiile citate și pot varia între populații și metode.
           </p>
           <ul className="source-list">
             {sources.map(([href, title]) => (

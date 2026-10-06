@@ -5,13 +5,14 @@ import { OrbitControls, useGLTF, useProgress } from '@react-three/drei'
 import { Color, Mesh, MeshStandardMaterial, PerspectiveCamera, Spherical, Vector3 } from 'three'
 import type { OrbitControls as OrbitControlsType } from 'three-stdlib'
 import { acceleratedRaycast, computeBoundsTree } from 'three-mesh-bvh'
-import { deepRegions, modelMap, regionForMesh } from '../data/modelMap'
+import { deepMeshes, regionForMesh } from '../data/modelMap'
 import { regionById } from '../data/brainRegions'
 import type { RegionId } from '../types/brain'
 
 type Props = {
-  active: RegionId[]
-  visited: RegionId[]
+  /** Mesh names drawn in strong blue, and in light blue as visited or related context. */
+  active: string[]
+  visited: string[]
   deep: boolean
   onSelect: (id: RegionId) => void
   reset: number
@@ -19,6 +20,8 @@ type Props = {
   reduced: boolean
   /** Lens zoom below 1 shrinks the model when a panel covers part of the canvas. */
   fit?: number
+  /** Camera direction to orbit to; +X is the patient's left, +Y up, +Z anterior. */
+  view?: readonly [number, number, number]
 }
 type Look = { color: Color; emissive: Color; glow: number; opacity: number }
 const modelUrl = '/models/brain.glb'
@@ -127,15 +130,15 @@ function Model({
   )
   useEffect(() => () => materials.forEach((m) => m.dispose()), [materials])
   const looks = useMemo(() => {
-    const activeNames = new Set(active.flatMap((id) => modelMap[id]))
-    const visitedNames = new Set(visited.flatMap((id) => modelMap[id]))
+    const activeNames = new Set(active)
+    const visitedNames = new Set(visited)
     const selection = active.length > 0 || visited.length > 0
-    const seeInside = deep || [...active, ...visited].some((id) => deepRegions.includes(id))
-    const activeInside = active.some((id) => deepRegions.includes(id))
+    const seeInside = deep || [...active, ...visited].some((name) => deepMeshes.has(name))
+    const activeInside = active.some((name) => deepMeshes.has(name))
     return parts.map((part): Look => {
       const isActive = activeNames.has(part.name),
         wasVisited = visitedNames.has(part.name)
-      const isInternal = !!part.id && deepRegions.includes(part.id)
+      const isInternal = deepMeshes.has(part.name)
       const surface = !isInternal && part.id !== 'brainstem' && part.id !== 'cerebellum'
       let opacity = 1
       if (selection && !isActive && !wasVisited) opacity = seeInside ? 0.07 : 0.28
@@ -220,7 +223,8 @@ function Controls({
   zoom,
   reduced,
   fit = 1,
-}: Pick<Props, 'reset' | 'zoom' | 'reduced' | 'fit'>) {
+  view,
+}: Pick<Props, 'reset' | 'zoom' | 'reduced' | 'fit' | 'view'>) {
   const ref = useRef<OrbitControlsType>(null)
   const lens = useRef(fit)
   const previousZoom = useRef(zoom)
@@ -290,6 +294,19 @@ function Controls({
     first.current = false
     invalidate()
   }, [reset, home, camera, invalidate, reduced])
+  // Orbits to a requested side of the brain at the default distance; leaving a view keeps
+  // the camera where it is.
+  useEffect(() => {
+    if (!view) return
+    const next = new Vector3(...view).setLength(home.length())
+    distance.current = null
+    if (reduced) {
+      camera.position.copy(next)
+      goal.current = null
+      ref.current?.update()
+    } else goal.current = next
+    invalidate()
+  }, [view, home, camera, invalidate, reduced])
   useEffect(() => {
     const delta = zoom - previousZoom.current
     previousZoom.current = zoom

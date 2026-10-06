@@ -51,3 +51,5 @@ export const deepRegions: RegionId[] = [
   'basal',
   'callosum',
 ]
+export const meshesFor = (ids: RegionId[]) => [...new Set(ids.flatMap((id) => modelMap[id]))]
+export const deepMeshes = new Set(meshesFor(deepRegions))

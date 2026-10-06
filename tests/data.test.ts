@@ -5,6 +5,7 @@ import { NodeIO } from '@gltf-transform/core'
 import { brainRegions } from '../src/data/brainRegions.ts'
 import { modelMap, regionForMesh } from '../src/data/modelMap.ts'
 import { pathways } from '../src/data/pathways.ts'
+import { syndromes } from '../src/data/syndromes.ts'
 
 test('all 17 semantic regions resolve to real, nonempty GLB geometry', async () => {
   const doc = await new NodeIO().read('public/models/brain.glb')
@@ -53,4 +54,47 @@ test('mesh taps resolve to anatomical regions rather than overlapping functional
   for (const name of modelMap.somatosensory) assert.equal(regionForMesh(name), 'somatosensory')
   for (const name of modelMap.visual) assert.equal(regionForMesh(name), 'occipital')
   assert.equal(regionForMesh('missing'), undefined)
+})
+test('twelve syndromes map to real meshes, the correct hemisphere and verifiable sources', async () => {
+  const doc = await new NodeIO().read('public/models/brain.glb')
+  const centroidX = new Map(
+    doc
+      .getRoot()
+      .listMeshes()
+      .map((m) => {
+        const positions = m.listPrimitives()[0].getAttribute('POSITION')!.getArray()!
+        let sum = 0
+        for (let i = 0; i < positions.length; i += 3) sum += positions[i]
+        return [m.getName(), sum / (positions.length / 3)]
+      }),
+  )
+  assert.equal(syndromes.length, 12)
+  assert.equal(new Set(syndromes.map((s) => s.id)).size, 12)
+  for (const s of syndromes) {
+    assert.ok(s.focus.length > 0, s.id)
+    for (const name of [...s.focus, ...(s.context ?? [])]) assert.ok(centroidX.has(name), name)
+    for (const id of s.regions)
+      assert.ok(
+        brainRegions.some((r) => r.id === id),
+        id,
+      )
+    if (s.pathway)
+      assert.ok(
+        pathways.some((p) => p.id === s.pathway),
+        s.pathway,
+      )
+    assert.ok(s.summary && s.causes && s.anatomy && s.psychology && s.insight && s.note)
+    assert.ok(s.signs.length >= 4 && s.facts.length >= 2, s.id)
+    assert.ok(s.sources.length >= 2, s.id)
+    for (const source of s.sources) assert.match(source.url, /^https:\/\//)
+  }
+  // BodyParts3D labels the left hemisphere on +X; lateralized syndromes must follow it.
+  const side = (id: string) => {
+    const s = syndromes.find((x) => x.id === id)!
+    return s.focus.map((name) => Math.sign(centroidX.get(name)!))
+  }
+  assert.deepEqual(side('broca'), [1])
+  assert.deepEqual(side('wernicke'), [1])
+  assert.deepEqual(side('neglect'), [-1, -1])
+  assert.deepEqual(side('prosopagnosia'), [-1])
 })

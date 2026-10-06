@@ -518,6 +518,14 @@ a {
 .tab[aria-pressed='true'] {
   color: var(--ink);
 }
+@media (max-width: 379px) {
+  .tabs {
+    gap: 20px;
+  }
+  .tab {
+    letter-spacing: 0.14em;
+  }
+}
 .tab[aria-pressed='true']::after {
   transform: scaleX(1);
 }
@@ -834,6 +842,152 @@ a {
 }
 .step-details li button[aria-current] .num {
   color: var(--blue);
+}
+
+/* Syndrome fiche */
+.list-intro {
+  padding: 14px 0 6px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  animation: fade var(--base) var(--ease) both;
+}
+.facts {
+  margin: 8px 0 0;
+  border-top: 1.5px solid var(--ink);
+}
+.facts div {
+  display: grid;
+  grid-template-columns: 7.4em minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.facts dt {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.facts dd {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+.section .causes {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+.causes strong {
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.section .main-idea {
+  margin-top: 16px;
+}
+.section .chips-label {
+  margin: 18px 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px 0 13px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  font-size: 14px;
+  transition:
+    border-color var(--fast),
+    background var(--fast),
+    transform var(--fast) var(--ease);
+}
+.chip:active {
+  transform: scale(0.96);
+}
+.history {
+  position: relative;
+  margin: 26px 0 0;
+  padding: 18px 20px 20px;
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--line);
+}
+.history-year {
+  display: block;
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--blue);
+}
+.history figcaption {
+  margin-top: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.history p {
+  margin-top: 10px;
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--ink-2);
+}
+.detail > .note + .note {
+  margin-top: 12px;
+}
+.sources ol {
+  display: grid;
+  gap: 4px;
+}
+.sources a {
+  display: inline;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-decoration-color: var(--line-2);
+  text-underline-offset: 3px;
+  transition:
+    color var(--fast),
+    text-decoration-color var(--fast);
+}
+.sources li {
+  padding: 6px 0;
+}
+.sources a svg {
+  margin-left: 4px;
+  vertical-align: -1px;
+}
+@media (hover: hover) {
+  .chip:hover {
+    border-color: var(--ink);
+    background: var(--surface);
+  }
+  .sources a:hover {
+    color: var(--blue);
+    text-decoration-color: var(--blue);
+  }
 }
 
 /* Pathway player */

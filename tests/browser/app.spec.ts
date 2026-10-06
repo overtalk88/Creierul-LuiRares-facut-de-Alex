@@ -218,6 +218,81 @@ for (const [width, height] of [
   })
 }
 
+test('syndromes: twelve fiches, model highlight, sources and links to anatomy and pathways', async ({
+  page,
+}) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text())
+  })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await ready(page)
+  const canvas = page.locator('canvas'),
+    original = hash(await canvas.screenshot())
+  await page.getByRole('button', { name: 'Sindroame', exact: true }).click()
+  const rows = page.locator('.pathway-row')
+  await expect(rows).toHaveCount(12)
+  const names = await rows
+    .locator('.row-text')
+    .evaluateAll((els) => els.map((el) => el.childNodes[0].textContent!.trim()))
+  for (const name of names) {
+    await rows.filter({ hasText: name }).click()
+    await expect(page.locator('.path-title h2')).toHaveText(name)
+    await expect(page.locator('.facts > div').first()).toBeVisible()
+    expect(await page.locator('.sources a').count()).toBeGreaterThanOrEqual(2)
+    await page.getByRole('button', { name: 'Toate sindroamele' }).click()
+  }
+  await rows.filter({ hasText: 'Neglijarea spațială unilaterală' }).click()
+  await expect(page.getByText('Exterior estompat automat')).toHaveCount(0)
+  await expect.poll(async () => hash(await canvas.screenshot())).not.toBe(original)
+  await page.locator('.sources summary').click()
+  await expect(page.locator('.sources a').first()).toHaveAttribute('href', /^https:\/\/pubmed/)
+  await page.locator('.chip').filter({ hasText: 'Lob parietal' }).click()
+  await expect(page.getByRole('heading', { name: 'Lob parietal', exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Toate structurile' }).click()
+  await page.getByRole('button', { name: 'Sindroame', exact: true }).click()
+  await rows.filter({ hasText: 'Sindromul amnezic' }).click()
+  await expect(page.getByText('Exterior estompat automat')).toBeVisible()
+  await page.getByRole('button', { name: 'Vezi traseul: Memorie' }).click()
+  await expect(page.locator('.path-title h2')).toHaveText('Memorie')
+  await page.getByRole('button', { name: 'Meniu', exact: true }).click()
+  await page
+    .getByRole('dialog', { name: 'Meniu' })
+    .getByRole('button', { name: /Sindroame/ })
+    .click()
+  await expect(rows).toHaveCount(12)
+  await page.getByRole('button', { name: 'Creierul Interactiv, revino la început' }).click()
+  await page.mouse.move(5, 700)
+  await expect.poll(async () => hash(await canvas.screenshot())).toBe(original)
+  expect(errors).toEqual([])
+})
+
+test('mobile 360: syndrome tab opens the sheet and the fiche fits', async ({ browser }) => {
+  const context = await browser.newContext({
+    viewport: { width: 360, height: 640 },
+    isMobile: true,
+    hasTouch: true,
+    reducedMotion: 'reduce',
+  })
+  const page = await context.newPage()
+  await ready(page)
+  await page.getByRole('button', { name: 'Sindroame', exact: true }).tap()
+  await expect(page.getByRole('button', { name: 'Restrânge panoul' })).toHaveAttribute(
+    'aria-expanded',
+    'true',
+  )
+  await page.locator('.pathway-row').filter({ hasText: 'Prosopagnozia' }).tap()
+  await expect(page.getByRole('heading', { name: 'Prosopagnozia', exact: true })).toBeVisible()
+  const tabsFit = await page.evaluate(() => {
+    const doc = document.documentElement
+    return doc.scrollWidth <= innerWidth
+  })
+  expect(tabsFit).toBe(true)
+  await page.screenshot({ path: 'test-results/mobile-syndrome-360.png' })
+  await context.close()
+})
+
 test('menu navigation, reading guide, focus return and layer switch', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))

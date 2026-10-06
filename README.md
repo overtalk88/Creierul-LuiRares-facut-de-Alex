@@ -26,6 +26,7 @@ npm run preview
 - 17 concepte anatomice selectabile din model sau din lista accesibilă, cu căutare fără diacritice obligatorii.
 - Fișe cu anatomie, funcții și legătura cu psihologia; structurile profunde estompează exteriorul automat.
 - 8 trasee/circuite: vedere, auz, atingere și propriocepție, mișcare voluntară, miros, răspuns la amenințare, memorie, recompensă și motivație.
+- 12 sindroame neuropsihologice (afazia Broca și Wernicke, sindromul amnezic, Korsakoff, sindromul frontal, neglijarea spațială, prosopagnozia, Klüver–Bucy, creierul divizat, Parkinson, sindromul cerebelos, locked-in): date-cheie, anatomie, manifestări, legătura cu psihologia, un reper istoric și surse PubMed. Modelul evidențiază zona afectată pe emisfera corectă și se rotește spre ea.
 - Evidențiere secvențială, pauză/redare, anterior/următor, acces direct la etapă și reluare.
 - Interfață luminoasă, minimalistă, gândită întâi pentru telefon: modelul ocupă ecranul, iar listele și fișele stau într-un panou glisant (pe desktop, într-o coloană); meniul, ghidul de citire și sursele se deschid la cerere.
 - Tranziții line pentru cameră, evidențieri, panouri și conținut.
@@ -63,7 +64,7 @@ npm run test:e2e
 npm run build
 ```
 
-Testele de date verifică existența reală a mesh-urilor GLB, toate referințele semantice și cele opt circuite. Testele de browser verifică randarea, selecția, rotirea, zoomul, repausul randării la inactivitate, comenzile playerului, reduced-motion, recuperarea după eroare, fallback fără WebGL și viewporturi de 360×640, 390×844 și 430×932. Gesturile sunt simulate în Chromium; aceasta nu înlocuiește verificarea pe telefonul fizic folosit la prezentare.
+Testele de date verifică existența reală a mesh-urilor GLB, toate referințele semantice, cele opt circuite și cele 12 sindroame, inclusiv emisfera mesh-urilor lateralizate. Testele de browser verifică randarea, selecția, rotirea, zoomul, repausul randării la inactivitate, comenzile playerului, reduced-motion, recuperarea după eroare, fallback fără WebGL și viewporturi de 360×640, 390×844 și 430×932. Gesturile sunt simulate în Chromium; aceasta nu înlocuiește verificarea pe telefonul fizic folosit la prezentare.
 
 ## Deploy pe Vercel
 
@@ -82,7 +83,7 @@ Proiectul este static și potrivit pentru un proiect personal/educațional. Un d
 ```text
 src/App.tsx                     starea aplicației și așezarea pe desktop/telefon
 src/components/BrainCanvas.tsx   randare, selectare, cameră, tranziții și fallback
-src/components/ExplorePanel.tsx  listele și fișele structurilor și traseelor
+src/components/ExplorePanel.tsx  listele și fișele structurilor, traseelor și sindroamelor
 src/components/PlayerBar.tsx    playerul traseelor (StepRail: etapele numerotate)
 src/components/Sheet.tsx        panoul glisant de pe telefon
 src/components/MenuDrawer.tsx   meniul principal
@@ -90,6 +91,7 @@ src/components/AboutDialog.tsx  ghid de citire, atribuire și surse
 src/components/Drawer.tsx       panouri modale animate pe <dialog>
 src/data/brainRegions.ts        textele anatomice românești
 src/data/pathways.ts            cele opt circuite și etapele lor
+src/data/syndromes.ts           cele 12 sindroame, cu date, surse și zonele de pe model
 src/data/modelMap.ts            maparea semantică
 src/hooks/usePathwayAnimation.ts player și reduced-motion
 public/models/brain.glb         modelul redistribuibil

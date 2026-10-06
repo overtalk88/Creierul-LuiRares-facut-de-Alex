@@ -1,7 +1,9 @@
 import { lazy, Suspense, useMemo, useRef, useState } from 'react'
 import { ArrowUpRight, Menu } from 'lucide-react'
 import { brainRegions, regionById } from './data/brainRegions'
+import { meshesFor } from './data/modelMap'
 import { pathways } from './data/pathways'
+import { syndromes } from './data/syndromes'
 import { usePathwayAnimation } from './hooks/usePathwayAnimation'
 import { useMediaQuery } from './hooks/useMediaQuery'
 import AboutDialog from './components/AboutDialog'
@@ -20,6 +22,9 @@ import {
   RegionInfo,
   RegionList,
   RegionSearch,
+  SyndromeHeading,
+  SyndromeInfo,
+  SyndromeList,
 } from './components/ExplorePanel'
 import type { Mode } from './components/ExplorePanel'
 import type { RegionId } from './types/brain'
@@ -33,6 +38,7 @@ export default function App() {
   const [mode, setMode] = useState<Mode>('anatomy')
   const [selected, setSelected] = useState<RegionId>()
   const [pathId, setPathId] = useState<string>()
+  const [syndromeId, setSyndromeId] = useState<string>()
   const [deep, setDeep] = useState(false)
   const [menu, setMenu] = useState(false)
   const [info, setInfo] = useState<'about' | 'guide'>()
@@ -46,30 +52,33 @@ export default function App() {
   const pathway = pathways.find((p) => p.id === pathId)
   const player = usePathwayAnimation(pathway)
   const region = selected ? regionById[selected] : undefined
+  const syndrome = syndromes.find((s) => s.id === syndromeId)
   const current = mode === 'pathways' ? pathway?.steps[player.step] : undefined
   // Stable arrays keep the 3D scene idle while unrelated UI state changes.
-  const active = useMemo<RegionId[]>(
-    () =>
-      mode === 'anatomy'
-        ? selected
-          ? [selected]
-          : []
-        : player.complete
-          ? []
-          : (current?.regions ?? []),
-    [mode, selected, player.complete, current],
-  )
-  const visited = useMemo<RegionId[]>(
-    () =>
-      mode === 'pathways'
-        ? (pathway?.steps
-            .slice(0, player.complete ? undefined : player.step)
-            .flatMap((s) => s.regions) ?? [])
-        : [],
-    [mode, pathway, player.complete, player.step],
-  )
+  const active = useMemo<string[]>(() => {
+    if (mode === 'anatomy') return selected ? meshesFor([selected]) : []
+    if (mode === 'syndromes') return syndrome?.focus ?? []
+    return player.complete ? [] : meshesFor(current?.regions ?? [])
+  }, [mode, selected, syndrome, player.complete, current])
+  const visited = useMemo<string[]>(() => {
+    if (mode === 'syndromes') return syndrome?.context ?? []
+    if (mode !== 'pathways' || !pathway) return []
+    return meshesFor(
+      pathway.steps.slice(0, player.complete ? undefined : player.step).flatMap((s) => s.regions),
+    )
+  }, [mode, syndrome, pathway, player.complete, player.step])
   const view =
-    mode === 'anatomy' ? (region ? 'region' : 'regions') : pathway ? 'pathway' : 'pathways'
+    mode === 'anatomy'
+      ? region
+        ? 'region'
+        : 'regions'
+      : mode === 'syndromes'
+        ? syndrome
+          ? 'syndrome'
+          : 'syndromes'
+        : pathway
+          ? 'pathway'
+          : 'pathways'
   const reveal = () => {
     if (mobile) setSnap('half')
   }
@@ -77,21 +86,35 @@ export default function App() {
     setMode(next)
     setSelected(undefined)
     setPathId(undefined)
+    setSyndromeId(undefined)
     player.stop()
     setQuery('')
+  }
+  // Choosing a tab from the collapsed sheet opens it so the list is visible.
+  const browse = (next: Mode) => {
+    switchMode(next)
+    if (snap === 'peek') reveal()
   }
   const selectRegion = (id: RegionId) => {
     player.stop()
     setMode('anatomy')
     setSelected(id)
     setPathId(undefined)
+    setSyndromeId(undefined)
     setTouched(true)
     reveal()
   }
   const selectPath = (id: string) => {
+    setMode('pathways')
     setPathId(id)
     setSelected(undefined)
+    setSyndromeId(undefined)
     player.start()
+    setTouched(true)
+    reveal()
+  }
+  const selectSyndrome = (id: string) => {
+    setSyndromeId(id)
     setTouched(true)
     reveal()
   }
@@ -103,6 +126,7 @@ export default function App() {
     setMode('anatomy')
     setSelected(undefined)
     setPathId(undefined)
+    setSyndromeId(undefined)
     setDeep(false)
     setReset((n) => n + 1)
     player.stop()
@@ -117,20 +141,30 @@ export default function App() {
   const filtered = brainRegions.filter((r) =>
     normalized(r.name + ' ' + r.category).includes(normalized(query)),
   )
-  const trail = region?.name ?? pathway?.name ?? (mode === 'pathways' ? 'Trasee' : undefined)
+  const trail =
+    region?.name ??
+    pathway?.name ??
+    syndrome?.name ??
+    (mode === 'pathways' ? 'Trasee' : mode === 'syndromes' ? 'Sindroame' : undefined)
 
   let header, body
   if (view === 'regions') {
     header = (
       <>
-        <ModeTabs mode={mode} onChange={switchMode} />
+        <ModeTabs mode={mode} onChange={browse} />
         <RegionSearch query={query} onChange={setQuery} onFocus={() => mobile && setSnap('full')} />
       </>
     )
     body = <RegionList regions={filtered} onSelect={selectRegion} />
   } else if (view === 'pathways') {
-    header = <ModeTabs mode={mode} onChange={switchMode} />
+    header = <ModeTabs mode={mode} onChange={browse} />
     body = <PathwayList onSelect={selectPath} />
+  } else if (view === 'syndromes') {
+    header = <ModeTabs mode={mode} onChange={browse} />
+    body = <SyndromeList onSelect={selectSyndrome} />
+  } else if (syndrome) {
+    header = <SyndromeHeading syndrome={syndrome} onBack={() => setSyndromeId(undefined)} />
+    body = <SyndromeInfo syndrome={syndrome} onRegion={selectRegion} onPathway={selectPath} />
   } else if (region) {
     header = <RegionHeading region={region} onBack={() => setSelected(undefined)} />
     body = <RegionInfo region={region} onPathways={() => switchMode('pathways')} />
@@ -142,7 +176,7 @@ export default function App() {
     )
     body = <PathwayInfo pathway={pathway} player={player} stepText={mobile} />
   }
-  const viewKey = selected ?? pathId ?? mode
+  const viewKey = selected ?? pathId ?? syndromeId ?? mode
 
   return (
     <div className="app" data-snap={mobile ? snap : undefined}>
@@ -205,6 +239,7 @@ export default function App() {
               zoom={zoom}
               reduced={player.reduced}
               fit={mobile && snap !== 'peek' ? 0.78 : 1}
+              view={mode === 'syndromes' ? syndrome?.view : undefined}
             />
           </Suspense>
         </div>
