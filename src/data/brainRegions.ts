@@ -4,7 +4,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'frontal',
     name: 'Lob frontal',
     category: 'Cortex cerebral',
-    color: '#dfa18f',
+    color: '#a9b5ee',
     description:
       'Partea anterioară a emisferelor cerebrale, situată înaintea șanțului central. Include regiuni prefrontale, premotorii și motorii, care contribuie împreună la organizarea comportamentului.',
     functions: [
@@ -18,7 +18,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'prefrontal',
     name: 'Cortex prefrontal',
     category: 'Control și decizie',
-    color: '#dfa18f',
+    color: '#a9b5ee',
     description:
       'Ansamblu de regiuni din partea anterioară a lobului frontal, conectate cu arii senzoriale, limbice și motorii. Nu este o singură unitate cu o funcție unică.',
     functions: [
@@ -33,7 +33,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'motor',
     name: 'Cortex motor primar',
     category: 'Mișcare',
-    color: '#efbf80',
+    color: '#8796e6',
     description:
       'Regiune din girusul precentral, anterior șanțului central. Participă la controlul mișcărilor, cu o organizare aproximativă a diferitelor părți ale corpului.',
     functions: [
@@ -48,7 +48,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'parietal',
     name: 'Lob parietal',
     category: 'Cortex cerebral',
-    color: '#b5c6a2',
+    color: '#c9cfe4',
     description:
       'Regiune situată posterior de șanțul central și deasupra lobului temporal. Include cortex somatosenzorial și arii de asociere care integrează informații din mai multe simțuri.',
     functions: [
@@ -62,7 +62,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'somatosensory',
     name: 'Cortex somatosenzorial',
     category: 'Atingere și corp',
-    color: '#d5d299',
+    color: '#b3bcdd',
     description:
       'Cortexul somatosenzorial primar se află în girusul postcentral, imediat în spatele șanțului central. Primește informații despre corp prin relee talamice.',
     functions: [
@@ -77,7 +77,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'temporal',
     name: 'Lob temporal',
     category: 'Cortex cerebral',
-    color: '#baa9cf',
+    color: '#8195dd',
     description:
       'Regiune laterală și inferioară a emisferelor, sub șanțul lateral. Include arii auditive, de asociere și regiuni mediale implicate în memorie.',
     functions: [
@@ -91,7 +91,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'auditory',
     name: 'Cortex auditiv',
     category: 'Auz',
-    color: '#a999cb',
+    color: '#6d82d3',
     description:
       'Arii corticale aflate în partea superioară a lobului temporal. Cortexul auditiv primar este situat în girusurile temporale transversale, pe suprafața ascunsă în șanțul lateral.',
     functions: [
@@ -106,7 +106,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'hippocampus',
     name: 'Hipocamp',
     category: 'Memorie · structură profundă',
-    color: '#e0bd75',
+    color: '#3f5bd8',
     deep: true,
     description:
       'Structură pereche din lobul temporal medial, conectată cu regiuni corticale prin care primește informații despre experiențe și context.',
@@ -121,7 +121,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'amygdala',
     name: 'Amigdală',
     category: 'Emoție · structură profundă',
-    color: '#d38b98',
+    color: '#5a50cf',
     deep: true,
     description:
       'Grup de nuclei din lobul temporal medial, situat anterior față de hipocamp. Are conexiuni cu cortexul, hipotalamusul și trunchiul cerebral.',
@@ -136,7 +136,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'occipital',
     name: 'Lob occipital',
     category: 'Cortex cerebral',
-    color: '#92bbc9',
+    color: '#dde1ec',
     description:
       'Porțiunea posterioară a emisferelor cerebrale, care conține cortexul vizual primar și alte arii implicate în analiza informației vizuale.',
     functions: [
@@ -150,7 +150,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'visual',
     name: 'Cortex vizual',
     category: 'Vedere',
-    color: '#92bbc9',
+    color: '#dde1ec',
     description:
       'Cortexul vizual primar este localizat în jurul șanțului calcarin, în lobul occipital. Primește o mare parte a informației vizuale prin nucleul geniculat lateral al talamusului.',
     functions: [
@@ -165,7 +165,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'thalamus',
     name: 'Talamus',
     category: 'Integrare · structură profundă',
-    color: '#8fc8be',
+    color: '#2f7bd4',
     deep: true,
     description:
       'Ansamblu de nuclei din diencefal, situat de o parte și de alta a ventriculului al treilea. Fiecare grup de nuclei are conexiuni specifice.',
@@ -181,7 +181,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'hypothalamus',
     name: 'Hipotalamus',
     category: 'Homeostazie · structură profundă',
-    color: '#d9a66e',
+    color: '#6b8de4',
     deep: true,
     description:
       'Regiune mică a diencefalului, aflată sub talamus. Leagă activitatea nervoasă de reglarea hormonală și de numeroase funcții autonome.',
@@ -196,7 +196,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'basal',
     name: 'Ganglionii bazali',
     category: 'Acțiune · structuri profunde',
-    color: '#bea3c4',
+    color: '#4a5db6',
     deep: true,
     description:
       'Grup de nuclei conectați în bucle cu cortexul și talamusul. Modelul include nucleul caudat, putamenul și globul palid.',
@@ -212,7 +212,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'callosum',
     name: 'Corp calos',
     category: 'Conexiuni · structură profundă',
-    color: '#d9ccae',
+    color: '#e8eaf2',
     deep: true,
     description:
       'Fascicul major de substanță albă situat pe linia mediană, care conectează regiuni din cele două emisfere cerebrale.',
@@ -227,7 +227,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'cerebellum',
     name: 'Cerebel',
     category: 'Coordonare și învățare',
-    color: '#c2a38c',
+    color: '#9ba2b8',
     description:
       'Structură situată posterior de trunchiul cerebral și sub emisfere. Suprafața sa are numeroase pliuri fine, iar conexiunile sale formează circuite cu alte regiuni.',
     functions: [
@@ -241,7 +241,7 @@ export const brainRegions: BrainRegion[] = [
     id: 'brainstem',
     name: 'Trunchi cerebral',
     category: 'Reglare și comunicare',
-    color: '#9ca9b5',
+    color: '#c2c6d2',
     description:
       'Cuprinde mezencefalul, puntea și bulbul rahidian. Conectează structurile superioare ale creierului cu măduva spinării și include nuclei ai nervilor cranieni.',
     functions: [
