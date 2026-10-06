@@ -7,7 +7,7 @@ Verificări TypeScript + build Vite, ESLint, teste de integritate pentru GLB/dat
 ## Acoperire
 
 - 3 teste de date: toate cele 17 mapări către geometrie reală, cele 8 circuite fără referințe lipsă și selecția corectă a girusurilor.
-- 8 teste de browser: randare/selecție/rotire/zoom/reset/inactivitate; playerul tuturor circuitelor; 3 dimensiuni mobile; eroare de model și reîncercare; fallback fără WebGL și mișcare redusă; încărcare, recuperare după pierderea contextului, dialog accesibil din tastatură și layout mărit.
+- 9 teste de browser: randare/selecție/rotire/zoom/reset/inactivitate; playerul tuturor circuitelor; 3 dimensiuni mobile, inclusiv tragerea panoului; meniu, ghid de citire, revenirea focusului și comutatorul de straturi; eroare de model și reîncercare; fallback fără WebGL și mișcare redusă; încărcare, recuperare după pierderea contextului, dialog accesibil din tastatură și layout mărit.
 - Telefon simulat: **360×640, 390×844, 430×932**, gesturi tactile injectate prin Chrome DevTools Protocol.
 - Fără depășire orizontală la aceste dimensiuni. Manipularea modelului nu derulează pagina.
 - Selecția structurilor profunde este verificată vizual; exteriorul devine transparent, structura activă rămâne vizibilă.

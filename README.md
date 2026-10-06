@@ -27,6 +27,8 @@ npm run preview
 - Fișe cu anatomie, funcții și legătura cu psihologia; structurile profunde estompează exteriorul automat.
 - 8 trasee/circuite: vedere, auz, atingere și propriocepție, mișcare voluntară, miros, răspuns la amenințare, memorie, recompensă și motivație.
 - Evidențiere secvențială, pauză/redare, anterior/următor, acces direct la etapă și reluare.
+- Interfață luminoasă, minimalistă, gândită întâi pentru telefon: modelul ocupă ecranul, iar listele și fișele stau într-un panou glisant (pe desktop, într-o coloană); meniul, ghidul de citire și sursele se deschid la cerere.
+- Tranziții line pentru cameră, evidențieri, panouri și conținut.
 - Respectarea `prefers-reduced-motion`, selecție prin butoane pentru utilizatorii care nu pot manipula 3D, mesaje de încărcare, reîncercare și fallback fără WebGL.
 
 ### Regiuni
@@ -78,8 +80,14 @@ Proiectul este static și potrivit pentru un proiect personal/educațional. Un d
 ## Structură
 
 ```text
-src/components/BrainCanvas.tsx   randare, selectare, camera și fallback
-src/components/AboutDialog.tsx  atribuire și surse
+src/App.tsx                     starea aplicației și așezarea pe desktop/telefon
+src/components/BrainCanvas.tsx   randare, selectare, cameră, tranziții și fallback
+src/components/ExplorePanel.tsx  listele și fișele structurilor și traseelor
+src/components/PlayerBar.tsx    playerul traseelor (StepRail: etapele numerotate)
+src/components/Sheet.tsx        panoul glisant de pe telefon
+src/components/MenuDrawer.tsx   meniul principal
+src/components/AboutDialog.tsx  ghid de citire, atribuire și surse
+src/components/Drawer.tsx       panouri modale animate pe <dialog>
 src/data/brainRegions.ts        textele anatomice românești
 src/data/pathways.ts            cele opt circuite și etapele lor
 src/data/modelMap.ts            maparea semantică
