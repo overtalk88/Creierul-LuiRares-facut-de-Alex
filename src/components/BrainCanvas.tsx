@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, useGLTF, useProgress } from '@react-three/drei'
 import { Color, Mesh, MeshStandardMaterial, PerspectiveCamera, Spherical, Vector3 } from 'three'
 import type { OrbitControls as OrbitControlsType } from 'three-stdlib'
+import { acceleratedRaycast, computeBoundsTree } from 'three-mesh-bvh'
 import { deepRegions, modelMap, regionForMesh } from '../data/modelMap'
 import { regionById } from '../data/brainRegions'
 import type { RegionId } from '../types/brain'
@@ -28,6 +29,9 @@ const visitedColor = '#97a3f3'
 const neutralColor = '#c3c8d6'
 // Exponential smoothing; capped delta keeps the first frame after idle from jumping.
 const settle = (delta: number, speed = 9) => 1 - Math.exp(-Math.min(delta, 1 / 30) * speed)
+const clampDistance = (radius: number) => Math.max(3, Math.min(9, radius))
+// Only precise pointers get hover feedback; touch never pays for hover raycasts.
+const canHover = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches
 const near = (a: Color, b: Color) =>
   Math.abs(a.r - b.r) + Math.abs(a.g - b.g) + Math.abs(a.b - b.b) < 0.004
 
@@ -84,6 +88,8 @@ function Model({
   const { scene } = useGLTF(modelUrl)
   const invalidate = useThree((state) => state.invalidate)
   const [hovered, setHovered] = useState<RegionId>()
+  const [hoverable] = useState(canHover)
+  const raycaster = useThree((state) => state.raycaster)
   useEffect(onReady, [onReady])
   useEffect(
     () => () => {
@@ -99,6 +105,22 @@ function Model({
     })
     return result
   }, [scene])
+  useEffect(() => {
+    if (!hoverable) return
+    // Hover raycasts run on every mouse move; a bounds tree keeps each one well under a
+    // millisecond. Built when the browser is idle so the model's fade-in stays smooth.
+    raycaster.firstHitOnly = true
+    const build = () =>
+      parts.forEach(({ mesh }) => {
+        if (!mesh.geometry.boundsTree) computeBoundsTree.call(mesh.geometry)
+      })
+    const idle = window.requestIdleCallback?.(build, { timeout: 1500 })
+    const timer = idle === undefined ? window.setTimeout(build, 300) : undefined
+    return () => {
+      if (idle !== undefined) window.cancelIdleCallback(idle)
+      window.clearTimeout(timer)
+    }
+  }, [hoverable, parts, raycaster])
   const materials = useMemo(
     () => parts.map(() => new MeshStandardMaterial({ roughness: 0.58, metalness: 0 })),
     [parts],
@@ -161,23 +183,31 @@ function Model({
             geometry={part.mesh.geometry}
             material={materials[index]}
             renderOrder={look.opacity < 0.5 ? 0 : 1}
-            raycast={pickable ? Mesh.prototype.raycast : () => {}}
+            raycast={pickable ? acceleratedRaycast : () => {}}
             onClick={(event) => {
               if (event.delta > 5 || !pickable) return
               event.stopPropagation()
               onSelect(part.id!)
             }}
-            onPointerOver={(event) => {
-              if (event.pointerType !== 'mouse' || !pickable) return
-              event.stopPropagation()
-              setHovered(part.id)
-              document.body.style.cursor = 'pointer'
-            }}
-            onPointerOut={(event) => {
-              if (event.pointerType !== 'mouse') return
-              setHovered((id) => (id === part.id ? undefined : id))
-              document.body.style.cursor = ''
-            }}
+            onPointerOver={
+              hoverable
+                ? (event) => {
+                    // No highlight while a drag is rotating the model.
+                    if (event.pointerType !== 'mouse' || event.buttons || !pickable) return
+                    event.stopPropagation()
+                    setHovered(part.id)
+                    document.body.style.cursor = 'pointer'
+                  }
+                : undefined
+            }
+            onPointerOut={
+              hoverable
+                ? () => {
+                    setHovered((id) => (id === part.id ? undefined : id))
+                    document.body.style.cursor = ''
+                  }
+                : undefined
+            }
           />
         )
       })}
@@ -195,12 +225,28 @@ function Controls({
   const lens = useRef(fit)
   const previousZoom = useRef(zoom)
   const goal = useRef<Vector3 | null>(null)
+  const distance = useRef<number | null>(null)
   const first = useRef(true)
   const scratch = useMemo(
     () => ({ from: new Spherical(), to: new Spherical(), offset: new Vector3() }),
     [],
   )
   const { camera, invalidate, gl, size } = useThree()
+  // Scales the pending camera distance; a running reset absorbs the zoom into its own target.
+  const dolly = useCallback(
+    (factor: number) => {
+      const target = ref.current?.target
+      if (!target) return
+      if (goal.current) {
+        const offset = goal.current.clone().sub(target)
+        goal.current.copy(target).add(offset.setLength(clampDistance(offset.length() * factor)))
+      } else
+        distance.current = clampDistance(
+          (distance.current ?? camera.position.distanceTo(target)) * factor,
+        )
+    },
+    [camera],
+  )
   const aspect = size.width / Math.max(1, size.height)
   // Portrait screens widen the vertical field of view so the whole brain fits horizontally;
   // past the distortion cap the camera backs off a little instead.
@@ -235,6 +281,7 @@ function Controls({
   useEffect(() => {
     const controls = ref.current
     controls?.target.set(0, 0, 0)
+    distance.current = null
     if (reduced || first.current) {
       camera.position.copy(home)
       goal.current = null
@@ -248,15 +295,29 @@ function Controls({
     previousZoom.current = zoom
     const controls = ref.current
     if (!delta || !controls) return
-    const offset = new Vector3().subVectors(goal.current ?? camera.position, controls.target)
-    offset.setLength(Math.max(3, Math.min(9, offset.length() * Math.pow(0.82, delta))))
-    const next = controls.target.clone().add(offset)
     if (reduced) {
-      camera.position.copy(next)
+      const offset = new Vector3().subVectors(camera.position, controls.target)
+      offset.setLength(clampDistance(offset.length() * Math.pow(0.82, delta)))
+      camera.position.copy(controls.target).add(offset)
       controls.update()
-    } else goal.current = next
+    } else dolly(Math.pow(0.82, delta))
     invalidate()
-  }, [zoom, camera, invalidate, reduced])
+  }, [zoom, camera, invalidate, reduced, dolly])
+  // Wheel zoom eases toward its target instead of jumping one notch at a time.
+  useEffect(() => {
+    const host = gl.domElement.closest('.canvas-host')
+    if (!host || reduced) return
+    const onWheel = (event: Event) => {
+      const wheel = event as WheelEvent
+      event.preventDefault()
+      event.stopPropagation()
+      const unit = wheel.deltaMode === 1 ? 16 : wheel.deltaMode === 2 ? 100 : 1
+      dolly(Math.exp(wheel.deltaY * unit * 0.0015))
+      invalidate()
+    }
+    host.addEventListener('wheel', onWheel, { capture: true, passive: false })
+    return () => host.removeEventListener('wheel', onWheel, { capture: true })
+  }, [gl, reduced, dolly, invalidate])
   useFrame((state, delta) => {
     if (camera instanceof PerspectiveCamera && camera.zoom !== lens.current) {
       const gap = lens.current - camera.zoom
@@ -265,25 +326,37 @@ function Controls({
       state.invalidate()
     }
     const controls = ref.current
-    if (!goal.current || !controls) return
-    // Interpolate on the sphere so the camera orbits instead of cutting through the model.
-    const k = settle(delta, 7)
+    if (!controls || (!goal.current && distance.current === null)) return
     const { from, to, offset } = scratch
-    from.setFromVector3(offset.subVectors(camera.position, controls.target))
-    to.setFromVector3(offset.subVectors(goal.current, controls.target))
-    let turn = to.theta - from.theta
-    if (turn > Math.PI) turn -= Math.PI * 2
-    if (turn < -Math.PI) turn += Math.PI * 2
-    from.radius += (to.radius - from.radius) * k
-    from.phi += (to.phi - from.phi) * k
-    from.theta += turn * k
-    camera.position.setFromSpherical(from).add(controls.target)
-    if (camera.position.distanceTo(goal.current) < 0.002) {
-      camera.position.copy(goal.current)
-      goal.current = null
+    if (goal.current) {
+      // Interpolate on the sphere so the camera orbits instead of cutting through the model.
+      const k = settle(delta, 7)
+      from.setFromVector3(offset.subVectors(camera.position, controls.target))
+      to.setFromVector3(offset.subVectors(goal.current, controls.target))
+      let turn = to.theta - from.theta
+      if (turn > Math.PI) turn -= Math.PI * 2
+      if (turn < -Math.PI) turn += Math.PI * 2
+      from.radius += (to.radius - from.radius) * k
+      from.phi += (to.phi - from.phi) * k
+      from.theta += turn * k
+      camera.position.setFromSpherical(from).add(controls.target)
+      if (camera.position.distanceTo(goal.current) < 0.002) {
+        camera.position.copy(goal.current)
+        goal.current = null
+      }
+    } else if (distance.current !== null) {
+      // Only the radius moves, so rotating while a zoom settles stays fluid.
+      offset.subVectors(camera.position, controls.target)
+      const gap = distance.current - offset.length()
+      if (Math.abs(gap) < 0.002) {
+        offset.setLength(distance.current)
+        distance.current = null
+      } else offset.setLength(offset.length() + gap * settle(delta, 10))
+      camera.position.copy(controls.target).add(offset)
     }
-    controls.update()
-    if (goal.current) state.invalidate()
+    // The controls already updated this frame; re-aim instead of applying their damping twice.
+    camera.lookAt(controls.target)
+    if (goal.current || distance.current !== null) state.invalidate()
   })
   useEffect(() => {
     const canvas = gl.domElement
@@ -300,8 +373,8 @@ function Controls({
       minDistance={3}
       maxDistance={9}
       enableDamping={!reduced}
-      dampingFactor={0.1}
-      rotateSpeed={0.65}
+      dampingFactor={0.07}
+      rotateSpeed={0.75}
       zoomSpeed={0.8}
       onStart={() => {
         goal.current = null
